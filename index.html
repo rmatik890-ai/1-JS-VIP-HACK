@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Loading...</title>
+  <title>Sakib Team - 30s Hack</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary-color: #00ffc8;
       --secondary-color: #00b3ff;
-      --accent-color: #ff007a;
-      --glass-bg: rgba(20, 20, 20, 0.75);
+      --glass-bg: rgba(20, 20, 20, 0.95);
       --glass-border: rgba(255, 255, 255, 0.1);
       --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
     }
@@ -37,8 +36,7 @@
       z-index: -1;
       animation: float 10s infinite alternate;
     }
-    body::before { top: -50px; left: -50px; background: var(--secondary-color); }
-    body::after { bottom: -50px; right: -50px; background: var(--accent-color); animation-delay: -5s; }
+    body::after { bottom: -50px; right: -50px; background: var(--secondary-color); animation-delay: -5s; }
     
     @keyframes float {
       0% { transform: translate(0, 0); }
@@ -54,20 +52,17 @@
     }
     .hidden { display: none !important; }
 
-    /* --- Logo/Profile Pic --- */
-    .app-logo-container {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+    /* --- Logo System --- */
+    .app-logo-container { text-align: center; margin-bottom: 20px; }
     .app-logo {
-      width: 100px; height: 100px;
+      width: 110px; height: 110px;
       border-radius: 50%;
       border: 3px solid var(--primary-color);
       padding: 5px;
       background: rgba(0,0,0,0.5);
-      box-shadow: 0 0 25px var(--primary-color);
+      box-shadow: 0 0 30px rgba(0,255,200, 0.3);
       object-fit: cover;
-      animation: logoPulse 3s infinite ease-in-out;
+      animation: logoPulse 4s infinite ease-in-out;
     }
     @keyframes logoPulse {
       0%, 100% { box-shadow: 0 0 25px var(--primary-color); transform: scale(1); }
@@ -85,6 +80,34 @@
       box-shadow: var(--shadow);
       margin-bottom: 20px;
       transition: 0.3s;
+    }
+
+    /* --- DYNAMIC LIGHTING ANIMATION --- */
+    .glow-wrapper {
+      position: relative;
+      padding: 3px;
+      border-radius: 24px;
+      background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+      background-size: 400%;
+      animation: glowing 10s linear infinite;
+      margin-bottom: 20px;
+    }
+    .glow-wrapper::before {
+      content: '';
+      position: absolute;
+      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      border-radius: 24px;
+      background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+      background-size: 400%;
+      z-index: -1;
+      filter: blur(20px);
+      opacity: 0.8;
+      animation: glowing 10s linear infinite;
+    }
+    @keyframes glowing {
+      0% { background-position: 0 0; }
+      50% { background-position: 400% 0; }
+      100% { background-position: 0 0; }
     }
 
     /* Inputs & Buttons */
@@ -114,59 +137,98 @@
       text-shadow: 0 0 10px var(--primary-color);
     }
 
-    /* Timer Design */
-    .timer-box {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 10px;
+    /* --- NEW 30s Signal Box Design --- */
+    .signal-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 10px;
+        background: #0a0a0a;
+        border-radius: 20px;
+        height: 100%;
+        position: relative;
+        z-index: 2;
     }
-    .period-info h2 { margin: 0; font-size: 18px; color: var(--secondary-color); }
-    .countdown {
-      font-size: 28px; font-weight: 900;
-      color: #fff;
-      background: rgba(0,0,0,0.5);
-      padding: 5px 15px; border-radius: 10px;
-      border: 1px solid var(--accent-color);
-      box-shadow: 0 0 15px rgba(255, 0, 122, 0.4);
-      min-width: 60px; text-align: center;
+
+    /* 1. Profile Name */
+    .profile-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255,255,255,0.05);
+        padding: 5px 15px;
+        border-radius: 50px;
+        border: 1px solid rgba(255,255,255,0.1);
+        margin-top: 10px;
     }
-    .countdown.urgent { color: #ff4c4c; border-color: #ff4c4c; animation: shake 0.5s infinite; }
+    .profile-img-small {
+        width: 30px; height: 30px; border-radius: 50%;
+        border: 2px solid var(--primary-color);
+    }
+    .profile-name-text {
+        font-size: 14px; font-weight: bold; color: #fff;
+    }
+
+    /* 2. Hack Name */
+    .hack-title {
+        color: var(--secondary-color);
+        font-weight: 900;
+        font-size: 22px;
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px rgba(0, 179, 255, 0.5);
+        margin-top: 5px;
+    }
+
+    /* 3. Period Number */
+    .period-display {
+        font-family: monospace;
+        font-size: 20px;
+        font-weight: bold;
+        color: #ffd700;
+        background: rgba(0,0,0,0.6);
+        padding: 8px 15px;
+        border-radius: 8px;
+        letter-spacing: 1px;
+        border: 1px solid #ffd700;
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    }
+
+    /* 4. Seconds (Timer) */
+    .timer-circle {
+        width: 100px; height: 100px;
+        border-radius: 50%;
+        border: 5px solid var(--primary-color);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 42px; font-weight: 900;
+        color: #fff;
+        background: radial-gradient(circle, rgba(0,255,200,0.2) 0%, rgba(0,0,0,0) 70%);
+        box-shadow: 0 0 30px rgba(0,255,200, 0.4);
+        margin: 10px 0;
+    }
+    .timer-circle.urgent { border-color: #ff4c4c; color: #ff4c4c; box-shadow: 0 0 30px rgba(255,76,76,0.6); }
+
+    /* 5. Big/Small Result */
+    .result-box {
+        font-size: 52px;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin-top: 5px;
+        padding: 15px 50px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 15px;
+        min-width: 200px;
+        margin-bottom: 20px;
+    }
+    .result-big { color: #00ffc8; text-shadow: 0 0 30px #00ffc8; border-color: #00ffc8; }
+    .result-small { color: #00b3ff; text-shadow: 0 0 30px #00b3ff; border-color: #00b3ff; }
     
-    @keyframes shake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -1px); } 100% { transform: translate(1px, 1px); } }
-
-    /* Prediction Box */
-    .prediction-box {
-      text-align: center;
-      background: rgba(0, 0, 0, 0.6);
-      border: 2px solid var(--primary-color);
-      box-shadow: 0 0 25px rgba(0, 255, 200, 0.2);
-      position: relative; overflow: hidden;
+    @keyframes popIn {
+        0% { transform: scale(0.5); opacity: 0; }
+        70% { transform: scale(1.1); }
+        100% { transform: scale(1); opacity: 1; }
     }
-    .pred-res { font-size: 36px; font-weight: 900; margin: 10px 0; color: var(--primary-color); text-shadow: 0 0 20px var(--primary-color); text-transform: uppercase; }
-
-    /* Win/Loss Stats */
-    .stats-row {
-      display: flex; gap: 10px; margin-bottom: 20px;
-    }
-    .stat-card {
-      flex: 1; padding: 10px; border-radius: 15px;
-      text-align: center; color: #fff;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .stat-card.win { border-color: #00ff00; box-shadow: 0 0 10px rgba(0,255,0,0.2); }
-    .stat-card.loss { border-color: #ff4c4c; box-shadow: 0 0 10px rgba(255,76,76,0.2); }
-    .stat-num { font-size: 20px; font-weight: bold; margin-top: 5px; }
-
-    /* Table */
-    table { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: 13px; }
-    th { color: #ffd700; padding: 10px; font-size: 11px; text-transform: uppercase; }
-    td { background: rgba(255,255,255,0.07); padding: 12px 5px; text-align: center; }
-    td:first-child { border-radius: 10px 0 0 10px; }
-    td:last-child { border-radius: 0 10px 10px 0; }
-    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-    .dot.green { background: #00ff00; box-shadow: 0 0 5px #00ff00; }
-    .dot.red { background: #ff0000; box-shadow: 0 0 5px #ff0000; }
-    .dot.violet { background: violet; box-shadow: 0 0 5px violet; }
 
     /* Floating TG */
     .telegram-button {
@@ -182,7 +244,6 @@
   <!-- 1. Login Section -->
   <div id="loginSection" class="container">
     <div class="app-logo-container">
-        <!-- Default Logo placeholder, gets updated via JS -->
         <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="app-logo" id="loginLogo">
     </div>
     <div class="header-title app-name">LOGIN</div>
@@ -212,91 +273,73 @@
   <!-- 3. Dashboard Section -->
   <div id="dashboardSection" class="container hidden">
     
-    <!-- Navbar -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <div style="font-weight: bold; color: #fff; font-size: 18px;" id="userNameDisplay">User</div>
-      <button onclick="handleLogout()" style="background: #ff4c4c; border:none; color:#fff; padding: 6px 12px; border-radius: 8px; font-weight:bold; cursor:pointer;">LOGOUT</button>
+    <!-- Navbar with Logout -->
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+      <button onclick="handleLogout()" style="background: rgba(255, 76, 76, 0.2); border:1px solid #ff4c4c; color:#ff4c4c; padding: 4px 12px; border-radius: 8px; font-weight:bold; cursor:pointer; font-size: 12px;">LOGOUT</button>
     </div>
-
-    <!-- App Name Header -->
-    <div class="header-title app-name" id="mainHeader">SAKIB TEAM</div>
 
     <!-- LOCKED VIEW -->
     <div id="lockedView" class="hidden">
       <div class="locked-box">
-        <h2 style="color:#ff4c4c; margin-top:0;">🔒 PREMIUM LOCKED</h2>
-        <p style="color:#ccc; font-size:14px;">Register via our link & submit proof to unlock signals.</p>
-        <a href="#" id="refLinkBtn" target="_blank" class="btn" style="display:block; text-decoration:none; line-height:20px; margin-bottom:15px; background: #fff; color: #000;">🔗 REGISTER HERE</a>
+        <div class="app-logo-container"><img src="" class="app-logo" id="lockedLogo" style="width:80px; height:80px;"></div>
+        <h2 style="color:#ff4c4c; margin-top:0; text-align:center;">🔒 PREMIUM ACCESS</h2>
+        <p style="color:#ccc; font-size:14px; text-align:center;">To see signals, register via our link & submit screenshot.</p>
+        <a href="#" id="refLinkBtn" target="_blank" class="btn" style="display:block; text-decoration:none; line-height:20px; margin-bottom:15px; background: #fff; color: #000; text-align:center;">🔗 REGISTER HERE</a>
         
         <div id="submissionForm">
             <input type="text" id="submitUid" placeholder="Enter Game UID">
             <div style="text-align: left; margin-top:10px;">
-                <label style="color:#aaa; font-size:12px;">Deposit Screenshot:</label>
+                <label style="color:#aaa; font-size:12px;">Upload Payment/Deposit Proof:</label>
                 <input type="file" id="proofFile" accept="image/*">
             </div>
             <button class="btn" onclick="submitVerification()">SUBMIT</button>
         </div>
 
-        <div id="pendingMessage" class="hidden">
-            <p style="color:orange; font-weight:bold;">⏳ PENDING APPROVAL</p>
+        <div id="pendingMessage" class="hidden" style="text-align:center;">
+            <p style="color:orange; font-weight:bold; font-size:18px;">⏳ PENDING APPROVAL</p>
+            <p style="font-size:12px; color:#aaa;">Admin is checking your screenshot.</p>
         </div>
       </div>
     </div>
 
     <!-- BANNED VIEW -->
     <div id="bannedView" class="hidden">
-      <div class="locked-box" style="border-color: red;">
+      <div class="locked-box" style="border-color: red; text-align:center;">
         <h2 style="color:red">🚫 BANNED</h2>
+        <p>Contact Support.</p>
       </div>
     </div>
 
-    <!-- ACTIVE VIEW (Signal Tool) -->
+    <!-- ACTIVE VIEW (The Main Hack Interface) -->
     <div id="activeView" class="hidden">
       
-      <!-- Timer & Period Info -->
-      <div class="card" style="padding: 15px;">
-        <div class="timer-box">
-            <div class="period-info">
-                <div style="font-size:12px; color:#aaa;">Current Period</div>
-                <h2 id="currentPeriod">Loading...</h2>
-            </div>
-            <div class="countdown" id="timerDisplay">
-                --
-            </div>
-        </div>
-        <div style="font-size:12px; color:#aaa; text-align:right;">Time Remaining</div>
-      </div>
+      <!-- WRAPPER FOR DYNAMIC LIGHTING -->
+      <div class="glow-wrapper">
+          <!-- Main Signal Card -->
+          <div class="card signal-container">
+              
+              <!-- 1. Name Profile -->
+              <div class="profile-info">
+                  <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" id="dashLogo" class="profile-img-small">
+                  <span class="profile-name-text" id="userNameDisplay">User</span>
+              </div>
 
-      <!-- Win/Loss Stats -->
-      <div class="stats-row">
-          <div class="stat-card win">
-              <div style="color:#00ff00; font-size:12px; font-weight:bold;">TOTAL WIN</div>
-              <div class="stat-num" id="winCount">0</div>
+              <!-- 2. Hack Name -->
+              <div class="hack-title app-name">SAKIB TEAM</div>
+
+              <!-- 3. Period Number (Updated) -->
+              <div class="period-display" id="autoPeriod">Loading...</div>
+
+              <!-- 4. Seconds (30s Countdown) -->
+              <div class="timer-circle" id="timer30s">30</div>
+
+              <!-- 5. Big/Small Result -->
+              <div class="result-box" id="predictionResult">WAIT</div>
+
           </div>
-          <div class="stat-card loss">
-              <div style="color:#ff4c4c; font-size:12px; font-weight:bold;">TOTAL LOSS</div>
-              <div class="stat-num" id="lossCount">0</div>
-          </div>
       </div>
 
-      <!-- Prediction Box -->
-      <div class="card prediction-box" id="predictionBox">
-        <div style="font-size:14px; color:#ccc;">SIGNAL PREDICTION</div>
-        <div class="pred-res">WAIT...</div>
-        <div style="font-size:12px; opacity:0.7;">Analysing Data...</div>
-      </div>
-
-      <!-- History Table -->
-      <div class="card">
-        <h3 style="margin:0 0 10px 0; font-size:16px;">📜 History Trend</h3>
-        <div style="overflow-x: auto;">
-            <table id="historyTable">
-                <thead><tr><th>Period</th><th>Num</th><th>Big/Small</th><th>Color</th></tr></thead>
-                <tbody id="resultBody"></tbody>
-            </table>
-        </div>
-      </div>
-    </div>
+     
 
   </div>
 
@@ -314,14 +357,14 @@
       from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyDJxUqp8j2kIHs2DUar2ZnA6riTpglJLZA",
-      authDomain: "akash-vip-nj-team.firebaseapp.com",
-      databaseURL: "https://akash-vip-nj-team-default-rtdb.firebaseio.com",
-      projectId: "akash-vip-nj-team",
-      storageBucket: "akash-vip-nj-team.firebasestorage.app",
-      messagingSenderId: "850639116762",
-      appId: "1:850639116762:web:4ed845a7e0d2ac633d88e3",
-      measurementId: "G-S66ZS57PF4"
+      apiKey: "AIzaSyCUAlNk4vKm9EsfXD6Laps4URU3hsD8MYU",
+  authDomain: "bdthack-b1c59.firebaseapp.com",
+  databaseURL: "https://bdthack-b1c59-default-rtdb.firebaseio.com",
+  projectId: "bdthack-b1c59",
+  storageBucket: "bdthack-b1c59.firebasestorage.app",
+  messagingSenderId: "54831055352",
+  appId: "1:54831055352:web:e6222630876fe4cd8ed60d",
+  measurementId: "G-K1GR4LCYM5"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -362,7 +405,7 @@
       const phone = document.getElementById('loginPhone').value;
       const pass = document.getElementById('loginPass').value;
       const email = phone + "@sakibteam.com";
-      signInWithEmailAndPassword(auth, email, pass).catch(() => alert("Login Failed"));
+      signInWithEmailAndPassword(auth, email, pass).catch(() => alert("Login Failed: Check Credentials"));
     };
 
     window.handleLogout = () => { signOut(auth); location.reload(); };
@@ -378,18 +421,18 @@
         onValue(ref(db, 'users/' + user.uid), (snapshot) => {
           const data = snapshot.val();
           if(data) {
-            document.getElementById('userNameDisplay').innerText = "Hi, " + data.username;
+            document.getElementById('userNameDisplay').innerText = data.username;
             updateUserInterface(data);
           }
         });
       } else {
         document.getElementById('dashboardSection').classList.add('hidden');
         document.getElementById('loginSection').classList.remove('hidden');
-        loadAppSettings(); // Load logo for login screen even if logged out
+        loadAppSettings(); 
       }
     });
 
-    // --- Load Settings (Logo, Text, Colors) ---
+    // --- Load Settings ---
     function loadAppSettings() {
       onValue(ref(db, 'settings'), (snapshot) => {
         const data = snapshot.val();
@@ -402,10 +445,11 @@
           if(data.refLink) document.getElementById('refLinkBtn').href = data.refLink;
           if(data.tgLink) document.getElementById('tgLink').href = data.tgLink;
           
-          // --- LOGO UPDATE CODE ---
           if(data.logoUrl) {
               document.getElementById('loginLogo').src = data.logoUrl;
               document.getElementById('regLogo').src = data.logoUrl;
+              document.getElementById('dashLogo').src = data.logoUrl;
+              document.getElementById('lockedLogo').src = data.logoUrl;
           }
 
           const lastNotice = localStorage.getItem('lastNotice');
@@ -428,7 +472,7 @@
         banned.classList.remove('hidden');
       } else if (userData.status === 'active') {
         active.classList.remove('hidden');
-        startSignalSystem();
+        start30sSystem(); // Start the 30s logic
       } else {
         locked.classList.remove('hidden');
         if(userData.verification_status === 'pending') {
@@ -445,125 +489,94 @@
       const user = auth.currentUser;
       const gameUid = document.getElementById('submitUid').value;
       const fileInput = document.getElementById('proofFile');
-      
       if(!gameUid || fileInput.files.length === 0) return alert("Enter UID & Upload Screenshot");
-
       const file = fileInput.files[0];
       const reader = new FileReader();
       reader.onloadend = function() {
           update(ref(db, 'users/' + user.uid), {
             game_uid: gameUid, deposit_proof: reader.result, verification_status: 'pending'
-          }).then(() => alert("Submitted! Wait for approval."));
+          }).then(() => alert("Submitted! Wait for Admin Approval."));
       }
       reader.readAsDataURL(file);
     };
 
-    // --- SIGNAL, TIMER & STATS LOGIC ---
-    let gameInterval;
-    const CURRENT_API = 'https://api.bdg88zf.com/api/webapi/GetGameIssue';
-    const HISTORY_API = 'https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json';
+    // ==========================================
+    //  ⚡️ 30 SECOND HACK LOGIC (ADJUSTED)
+    // ==========================================
+    
+    let systemInterval;
 
-    function startSignalSystem() {
-      if(gameInterval) return;
-      
-      // Initial Load
-      loadAndPredict();
-      startTimer();
-
-      // Refresh Data every 5 seconds
-      gameInterval = setInterval(() => {
-        loadAndPredict();
-      }, 5000);
+    function start30sSystem() {
+        if(systemInterval) return;
+        runTimerLogic();    // Run immediately
+        systemInterval = setInterval(runTimerLogic, 1000); // Loop every second
     }
 
-    // --- TIMER FUNCTION ---
-    function startTimer() {
-        setInterval(() => {
-            const now = new Date();
-            const seconds = now.getSeconds();
-            const remaining = 60 - seconds;
-            
-            const timerEl = document.getElementById('timerDisplay');
-            timerEl.innerText = remaining < 10 ? `0${remaining}` : remaining;
-
-            // Visual effects for last 10 seconds
-            if(remaining <= 10) {
-                timerEl.classList.add('urgent');
-            } else {
-                timerEl.classList.remove('urgent');
-            }
-        }, 1000);
-    }
-
-    async function loadAndPredict() {
-      // 1. Get Current Period
-      try {
-        const res = await fetch(CURRENT_API, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ typeId: 1, language: 0, random: "e7fe6c090da2495ab8290dac551ef1ed", signature: "1F390E2B2D8A55D693E57FD905AE73A7", timestamp: 1723726679 })
-        });
-        const data = await res.json();
-        document.getElementById('currentPeriod').innerText = data.data?.issueNumber || "Wait...";
-      } catch(e) {}
-
-      // 2. Get History & Calculate Stats
-      try {
-        const res = await fetch(HISTORY_API + '?ts=' + Date.now());
-        const data = await res.json();
-        const list = data.data.list.slice(0, 15); // Get last 15 items
+    function runTimerLogic() {
+        const now = new Date();
+        const seconds = now.getSeconds();
+        const minutes = now.getMinutes();
+        const hours = now.getHours();
         
-        // Render Table
-        const tbody = document.getElementById('resultBody');
-        tbody.innerHTML = '';
+        // --- 1. Calculate Period Number ---
+        // Logic for 3:19 PM -> 51119 (Target)
+        // Formula: (TotalMinutes * 2) - 719 (Offset calculated from your data)
+        // 15:19 -> 919 mins -> 1838 -> 1838 - 719 = 1119
+        // Add fixed '5' at start -> 51119
         
-        let winCount = 0;
-        let lossCount = 0;
-
-        // Calculate Wins/Losses based on a simple Trend Logic
-        // Logic: Predict Opposite of Previous (Big -> Predict Small)
-        for (let i = 0; i < list.length - 1; i++) {
-             const currentResult = parseInt(list[i].number) >= 5 ? 'Big' : 'Small';
-             const previousResult = parseInt(list[i+1].number) >= 5 ? 'Big' : 'Small';
-             
-             // The Simulated Prediction that would have been made for this round
-             const simulatedPrediction = previousResult === 'Big' ? 'Small' : 'Big';
-
-             if (currentResult === simulatedPrediction) winCount++;
-             else lossCount++;
+        const totalMinutesPassed = (hours * 60) + minutes;
+        let calculatedSequence = (totalMinutesPassed * 2) - 719; 
+        
+        // If we are in the second half of the minute (30s+), increment by 1
+        if (seconds >= 30) {
+            calculatedSequence += 1;
         }
 
-        // Update Stats UI
-        document.getElementById('winCount').innerText = winCount;
-        document.getElementById('lossCount').innerText = lossCount;
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        
+        // Ensure Sequence is padded to 4 digits (e.g., 1119) and prepend '5'
+        const sequencePadded = String(calculatedSequence).padStart(4, '0'); 
+        
+        // Full String: YYYYMMDD + 1000 + 5 + Sequence
+        // At 3:19 PM this generates: ...100051119 (Last 5 digits: 51119)
+        const periodString = `${year}${month}${day}10005${sequencePadded}`;
+        
+        document.getElementById('autoPeriod').innerText = periodString;
 
-        // Populate Table UI
-        list.slice(0,10).forEach(item => {
-           const n = parseInt(item.number);
-           const size = n >= 5 ? 'Big' : 'Small';
-           const color = [1,3,7,9].includes(n) ? 'green' : ([2,4,6,8].includes(n) ? 'red' : 'violet');
-           
-           tbody.innerHTML += `
-             <tr>
-               <td>${item.issueNumber.slice(-4)}</td>
-               <td style="color:${color==='green'?'#0f0':color==='red'?'#f00':'#f0f'}; font-weight:bold;">${n}</td>
-               <td>${size}</td>
-               <td><span class="dot ${color}"></span></td>
-             </tr>`;
-        });
+        // --- 2. Calculate 30s Timer ---
+        let remaining = 30 - (seconds % 30);
+        
+        const timerEl = document.getElementById('timer30s');
+        timerEl.innerText = remaining;
 
-        // 3. Make NEXT Prediction (Realtime)
-        const latestResultSize = parseInt(list[0].number) >= 5 ? 'Big' : 'Small';
-        const nextPrediction = latestResultSize === 'Big' ? 'Small' : 'Big'; 
-        const confidence = 85 + Math.floor(Math.random() * 10);
+        if (remaining <= 5) {
+            timerEl.classList.add('urgent');
+        } else {
+            timerEl.classList.remove('urgent');
+        }
 
-        document.getElementById('predictionBox').innerHTML = `
-            <div style="font-size:14px; color:#ccc; letter-spacing:1px;">NEXT PREDICTION</div>
-            <div class="pred-res">${nextPrediction.toUpperCase()}</div>
-            <div style="font-size:12px; color:#fff; background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; display:inline-block;">Chance: ${confidence}%</div>
-        `;
-
-      } catch(e) {}
+        // --- 3. Generate Signal on Reset ---
+        const resultEl = document.getElementById('predictionResult');
+        
+        if (remaining === 30 || resultEl.innerText === "WAIT") {
+            const outcomes = ["BIG", "SMALL"];
+            const randomPick = outcomes[Math.floor(Math.random() * outcomes.length)];
+            
+            resultEl.innerText = randomPick;
+            
+            resultEl.className = "result-box"; 
+            if(randomPick === "BIG") {
+                resultEl.classList.add("result-big");
+            } else {
+                resultEl.classList.add("result-small");
+            }
+            
+            resultEl.style.animation = 'none';
+            resultEl.offsetHeight; 
+            resultEl.style.animation = 'popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        }
     }
   </script>
 </body>
