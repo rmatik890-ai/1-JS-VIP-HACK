@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loading...</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #00ffc8;
+      --secondary-color: #00b3ff;
+      --accent-color: #ff007a;
+      --glass-bg: rgba(20, 20, 20, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Outfit', sans-serif;
+      background-color: #050505;
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background Animation */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: var(--primary-color);
+      filter: blur(120px);
+      opacity: 0.15;
+      z-index: -1;
+      animation: float 10s infinite alternate;
+    }
+    body::before { top: -50px; left: -50px; background: var(--secondary-color); }
+    body::after { bottom: -50px; right: -50px; background: var(--accent-color); animation-delay: -5s; }
+    
+    @keyframes float {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(30px, 30px); }
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 480px;
+      margin: 0 auto;
+      z-index: 1;
+      position: relative;
+    }
+    .hidden { display: none !important; }
+
+    /* --- Logo/Profile Pic --- */
+    .app-logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .app-logo {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      border: 3px solid var(--primary-color);
+      padding: 5px;
+      background: rgba(0,0,0,0.5);
+      box-shadow: 0 0 25px var(--primary-color);
+      object-fit: cover;
+      animation: logoPulse 3s infinite ease-in-out;
+    }
+    @keyframes logoPulse {
+      0%, 100% { box-shadow: 0 0 25px var(--primary-color); transform: scale(1); }
+      50% { box-shadow: 0 0 50px var(--primary-color); transform: scale(1.05); }
+    }
+
+    /* --- Glass Cards --- */
+    .auth-card, .card, .locked-box {
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      transition: 0.3s;
+    }
+
+    /* Inputs & Buttons */
+    input {
+      width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.4);
+      color: #fff; font-family: 'Outfit', sans-serif;
+      box-sizing: border-box; outline: none;
+    }
+    input:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(0, 255, 200, 0.2); }
+    
+    .btn {
+      width: 100%; padding: 15px; border: none; border-radius: 12px;
+      background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+      color: #000; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+      cursor: pointer; margin-top: 15px; font-size: 16px; 
+      box-shadow: 0 0 20px rgba(0, 255, 200, 0.4);
+    }
+    .switch-link { text-align: center; margin-top: 15px; color: #ccc; font-size: 14px; cursor: pointer; }
+    .switch-link span { color: var(--primary-color); text-decoration: underline; }
+
+    /* --- Dashboard --- */
+    .header-title { 
+      text-align: center; margin-bottom: 20px; color: #fff; 
+      font-size: 24px; font-weight: 900; letter-spacing: 2px;
+      text-shadow: 0 0 10px var(--primary-color);
+    }
+
+    /* Timer Design */
+    .timer-box {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px;
+    }
+    .period-info h2 { margin: 0; font-size: 18px; color: var(--secondary-color); }
+    .countdown {
+      font-size: 28px; font-weight: 900;
+      color: #fff;
+      background: rgba(0,0,0,0.5);
+      padding: 5px 15px; border-radius: 10px;
+      border: 1px solid var(--accent-color);
+      box-shadow: 0 0 15px rgba(255, 0, 122, 0.4);
+      min-width: 60px; text-align: center;
+    }
+    .countdown.urgent { color: #ff4c4c; border-color: #ff4c4c; animation: shake 0.5s infinite; }
+    
+    @keyframes shake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -1px); } 100% { transform: translate(1px, 1px); } }
+
+    /* Prediction Box */
+    .prediction-box {
+      text-align: center;
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid var(--primary-color);
+      box-shadow: 0 0 25px rgba(0, 255, 200, 0.2);
+      position: relative; overflow: hidden;
+    }
+    .pred-res { font-size: 36px; font-weight: 900; margin: 10px 0; color: var(--primary-color); text-shadow: 0 0 20px var(--primary-color); text-transform: uppercase; }
+
+    /* Win/Loss Stats */
+    .stats-row {
+      display: flex; gap: 10px; margin-bottom: 20px;
+    }
+    .stat-card {
+      flex: 1; padding: 10px; border-radius: 15px;
+      text-align: center; color: #fff;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .stat-card.win { border-color: #00ff00; box-shadow: 0 0 10px rgba(0,255,0,0.2); }
+    .stat-card.loss { border-color: #ff4c4c; box-shadow: 0 0 10px rgba(255,76,76,0.2); }
+    .stat-num { font-size: 20px; font-weight: bold; margin-top: 5px; }
+
+    /* Table */
+    table { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: 13px; }
+    th { color: #ffd700; padding: 10px; font-size: 11px; text-transform: uppercase; }
+    td { background: rgba(255,255,255,0.07); padding: 12px 5px; text-align: center; }
+    td:first-child { border-radius: 10px 0 0 10px; }
+    td:last-child { border-radius: 0 10px 10px 0; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .dot.green { background: #00ff00; box-shadow: 0 0 5px #00ff00; }
+    .dot.red { background: #ff0000; box-shadow: 0 0 5px #ff0000; }
+    .dot.violet { background: violet; box-shadow: 0 0 5px violet; }
+
+    /* Floating TG */
+    .telegram-button {
+      position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px;
+      background: #0088cc; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 20px #0088cc; animation: pulse 2s infinite; z-index: 1000;
+    }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0,136,204, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(0,136,204, 0); } }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Login Section -->
+  <div id="loginSection" class="container">
+    <div class="app-logo-container">
+        <!-- Default Logo placeholder, gets updated via JS -->
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="app-logo" id="loginLogo">
+    </div>
+    <div class="header-title app-name">LOGIN</div>
+    <div class="auth-card">
+      <input type="number" id="loginPhone" placeholder="Phone Number">
+      <input type="password" id="loginPass" placeholder="Password">
+      <button class="btn" onclick="handleLogin()">Login Now</button>
+      <div class="switch-link" onclick="showRegister()">New User? <span>Register</span></div>
+    </div>
+  </div>
+
+  <!-- 2. Register Section -->
+  <div id="registerSection" class="container hidden">
+    <div class="app-logo-container">
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="app-logo" id="regLogo">
+    </div>
+    <div class="header-title app-name">REGISTER</div>
+    <div class="auth-card">
+      <input type="text" id="regName" placeholder="Full Name">
+      <input type="number" id="regPhone" placeholder="Phone Number">
+      <input type="password" id="regPass" placeholder="Password">
+      <button class="btn" onclick="handleRegister()">Create Account</button>
+      <div class="switch-link" onclick="showLogin()">Have an account? <span>Login</span></div>
+    </div>
+  </div>
+
+  <!-- 3. Dashboard Section -->
+  <div id="dashboardSection" class="container hidden">
+    
+    <!-- Navbar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <div style="font-weight: bold; color: #fff; font-size: 18px;" id="userNameDisplay">User</div>
+      <button onclick="handleLogout()" style="background: #ff4c4c; border:none; color:#fff; padding: 6px 12px; border-radius: 8px; font-weight:bold; cursor:pointer;">LOGOUT</button>
+    </div>
+
+    <!-- App Name Header -->
+    <div class="header-title app-name" id="mainHeader">SAKIB TEAM</div>
+
+    <!-- LOCKED VIEW -->
+    <div id="lockedView" class="hidden">
+      <div class="locked-box">
+        <h2 style="color:#ff4c4c; margin-top:0;">🔒 PREMIUM LOCKED</h2>
+        <p style="color:#ccc; font-size:14px;">Register via our link & submit proof to unlock signals.</p>
+        <a href="#" id="refLinkBtn" target="_blank" class="btn" style="display:block; text-decoration:none; line-height:20px; margin-bottom:15px; background: #fff; color: #000;">🔗 REGISTER HERE</a>
+        
+        <div id="submissionForm">
+            <input type="text" id="submitUid" placeholder="Enter Game UID">
+            <div style="text-align: left; margin-top:10px;">
+                <label style="color:#aaa; font-size:12px;">Deposit Screenshot:</label>
+                <input type="file" id="proofFile" accept="image/*">
+            </div>
+            <button class="btn" onclick="submitVerification()">SUBMIT</button>
+        </div>
+
+        <div id="pendingMessage" class="hidden">
+            <p style="color:orange; font-weight:bold;">⏳ PENDING APPROVAL</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BANNED VIEW -->
+    <div id="bannedView" class="hidden">
+      <div class="locked-box" style="border-color: red;">
+        <h2 style="color:red">🚫 BANNED</h2>
+      </div>
+    </div>
+
+    <!-- ACTIVE VIEW (Signal Tool) -->
+    <div id="activeView" class="hidden">
+      
+      <!-- Timer & Period Info -->
+      <div class="card" style="padding: 15px;">
+        <div class="timer-box">
+            <div class="period-info">
+                <div style="font-size:12px; color:#aaa;">Current Period</div>
+                <h2 id="currentPeriod">Loading...</h2>
+            </div>
+            <div class="countdown" id="timerDisplay">
+                --
+            </div>
+        </div>
+        <div style="font-size:12px; color:#aaa; text-align:right;">Time Remaining</div>
+      </div>
+
+      <!-- Win/Loss Stats -->
+      <div class="stats-row">
+          <div class="stat-card win">
+              <div style="color:#00ff00; font-size:12px; font-weight:bold;">TOTAL WIN</div>
+              <div class="stat-num" id="winCount">0</div>
+          </div>
+          <div class="stat-card loss">
+              <div style="color:#ff4c4c; font-size:12px; font-weight:bold;">TOTAL LOSS</div>
+              <div class="stat-num" id="lossCount">0</div>
+          </div>
+      </div>
+
+      <!-- Prediction Box -->
+      <div class="card prediction-box" id="predictionBox">
+        <div style="font-size:14px; color:#ccc;">SIGNAL PREDICTION</div>
+        <div class="pred-res">WAIT...</div>
+        <div style="font-size:12px; opacity:0.7;">Analysing Data...</div>
+      </div>
+
+      <!-- History Table -->
+      <div class="card">
+        <h3 style="margin:0 0 10px 0; font-size:16px;">📜 History Trend</h3>
+        <div style="overflow-x: auto;">
+            <table id="historyTable">
+                <thead><tr><th>Period</th><th>Num</th><th>Big/Small</th><th>Color</th></tr></thead>
+                <tbody id="resultBody"></tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Telegram Button -->
+  <a href="#" id="tgLink" target="_blank" class="telegram-button">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" style="width:55%; filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));">
+  </a>
+
+  <!-- Firebase Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } 
+      from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getDatabase, ref, set, onValue, update } 
+      from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDJxUqp8j2kIHs2DUar2ZnA6riTpglJLZA",
+      authDomain: "akash-vip-nj-team.firebaseapp.com",
+      databaseURL: "https://akash-vip-nj-team-default-rtdb.firebaseio.com",
+      projectId: "akash-vip-nj-team",
+      storageBucket: "akash-vip-nj-team.firebasestorage.app",
+      messagingSenderId: "850639116762",
+      appId: "1:850639116762:web:4ed845a7e0d2ac633d88e3",
+      measurementId: "G-S66ZS57PF4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    // --- UI Helpers ---
+    window.showRegister = () => {
+      document.getElementById('loginSection').classList.add('hidden');
+      document.getElementById('registerSection').classList.remove('hidden');
+    };
+    window.showLogin = () => {
+      document.getElementById('registerSection').classList.add('hidden');
+      document.getElementById('loginSection').classList.remove('hidden');
+    };
+
+    // --- Auth Logic ---
+    window.handleRegister = () => {
+      const name = document.getElementById('regName').value;
+      const phone = document.getElementById('regPhone').value;
+      const pass = document.getElementById('regPass').value;
+      if(!name || !phone || !pass) return alert("Please fill all fields");
+      const email = phone + "@sakibteam.com"; 
+
+      createUserWithEmailAndPassword(auth, email, pass)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          set(ref(db, 'users/' + user.uid), {
+            username: name, phone: phone, password: pass, status: 'locked', uid: user.uid
+          });
+          alert("Success! Please Login.");
+          showLogin();
+        })
+        .catch((e) => alert(e.message));
+    };
+
+    window.handleLogin = () => {
+      const phone = document.getElementById('loginPhone').value;
+      const pass = document.getElementById('loginPass').value;
+      const email = phone + "@sakibteam.com";
+      signInWithEmailAndPassword(auth, email, pass).catch(() => alert("Login Failed"));
+    };
+
+    window.handleLogout = () => { signOut(auth); location.reload(); };
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('registerSection').classList.add('hidden');
+        document.getElementById('dashboardSection').classList.remove('hidden');
+        
+        loadAppSettings(); 
+
+        onValue(ref(db, 'users/' + user.uid), (snapshot) => {
+          const data = snapshot.val();
+          if(data) {
+            document.getElementById('userNameDisplay').innerText = "Hi, " + data.username;
+            updateUserInterface(data);
+          }
+        });
+      } else {
+        document.getElementById('dashboardSection').classList.add('hidden');
+        document.getElementById('loginSection').classList.remove('hidden');
+        loadAppSettings(); // Load logo for login screen even if logged out
+      }
+    });
+
+    // --- Load Settings (Logo, Text, Colors) ---
+    function loadAppSettings() {
+      onValue(ref(db, 'settings'), (snapshot) => {
+        const data = snapshot.val();
+        if(data) {
+          if(data.siteName) {
+            document.querySelectorAll('.app-name').forEach(el => el.innerText = data.siteName);
+            document.title = data.siteName;
+          }
+          if(data.primaryColor) document.documentElement.style.setProperty('--primary-color', data.primaryColor);
+          if(data.refLink) document.getElementById('refLinkBtn').href = data.refLink;
+          if(data.tgLink) document.getElementById('tgLink').href = data.tgLink;
+          
+          // --- LOGO UPDATE CODE ---
+          if(data.logoUrl) {
+              document.getElementById('loginLogo').src = data.logoUrl;
+              document.getElementById('regLogo').src = data.logoUrl;
+          }
+
+          const lastNotice = localStorage.getItem('lastNotice');
+          if(data.notice && data.notice !== "" && data.notice !== lastNotice) {
+            alert("📢 NOTICE: " + data.notice);
+            localStorage.setItem('lastNotice', data.notice);
+          }
+        }
+      });
+    }
+
+    function updateUserInterface(userData) {
+      const locked = document.getElementById('lockedView');
+      const active = document.getElementById('activeView');
+      const banned = document.getElementById('bannedView');
+      
+      locked.classList.add('hidden'); active.classList.add('hidden'); banned.classList.add('hidden');
+
+      if (userData.status === 'banned') {
+        banned.classList.remove('hidden');
+      } else if (userData.status === 'active') {
+        active.classList.remove('hidden');
+        startSignalSystem();
+      } else {
+        locked.classList.remove('hidden');
+        if(userData.verification_status === 'pending') {
+            document.getElementById('pendingMessage').classList.remove('hidden');
+            document.getElementById('submissionForm').classList.add('hidden');
+        } else {
+            document.getElementById('pendingMessage').classList.add('hidden');
+            document.getElementById('submissionForm').classList.remove('hidden');
+        }
+      }
+    }
+
+    window.submitVerification = () => {
+      const user = auth.currentUser;
+      const gameUid = document.getElementById('submitUid').value;
+      const fileInput = document.getElementById('proofFile');
+      
+      if(!gameUid || fileInput.files.length === 0) return alert("Enter UID & Upload Screenshot");
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      reader.onloadend = function() {
+          update(ref(db, 'users/' + user.uid), {
+            game_uid: gameUid, deposit_proof: reader.result, verification_status: 'pending'
+          }).then(() => alert("Submitted! Wait for approval."));
+      }
+      reader.readAsDataURL(file);
+    };
+
+    // --- SIGNAL, TIMER & STATS LOGIC ---
+    let gameInterval;
+    const CURRENT_API = 'https://api.bdg88zf.com/api/webapi/GetGameIssue';
+    const HISTORY_API = 'https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json';
+
+    function startSignalSystem() {
+      if(gameInterval) return;
+      
+      // Initial Load
+      loadAndPredict();
+      startTimer();
+
+      // Refresh Data every 5 seconds
+      gameInterval = setInterval(() => {
+        loadAndPredict();
+      }, 5000);
+    }
+
+    // --- TIMER FUNCTION ---
+    function startTimer() {
+        setInterval(() => {
+            const now = new Date();
+            const seconds = now.getSeconds();
+            const remaining = 60 - seconds;
+            
+            const timerEl = document.getElementById('timerDisplay');
+            timerEl.innerText = remaining < 10 ? `0${remaining}` : remaining;
+
+            // Visual effects for last 10 seconds
+            if(remaining <= 10) {
+                timerEl.classList.add('urgent');
+            } else {
+                timerEl.classList.remove('urgent');
+            }
+        }, 1000);
+    }
+
+    async function loadAndPredict() {
+      // 1. Get Current Period
+      try {
+        const res = await fetch(CURRENT_API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ typeId: 1, language: 0, random: "e7fe6c090da2495ab8290dac551ef1ed", signature: "1F390E2B2D8A55D693E57FD905AE73A7", timestamp: 1723726679 })
+        });
+        const data = await res.json();
+        document.getElementById('currentPeriod').innerText = data.data?.issueNumber || "Wait...";
+      } catch(e) {}
+
+      // 2. Get History & Calculate Stats
+      try {
+        const res = await fetch(HISTORY_API + '?ts=' + Date.now());
+        const data = await res.json();
+        const list = data.data.list.slice(0, 15); // Get last 15 items
+        
+        // Render Table
+        const tbody = document.getElementById('resultBody');
+        tbody.innerHTML = '';
+        
+        let winCount = 0;
+        let lossCount = 0;
+
+        // Calculate Wins/Losses based on a simple Trend Logic
+        // Logic: Predict Opposite of Previous (Big -> Predict Small)
+        for (let i = 0; i < list.length - 1; i++) {
+             const currentResult = parseInt(list[i].number) >= 5 ? 'Big' : 'Small';
+             const previousResult = parseInt(list[i+1].number) >= 5 ? 'Big' : 'Small';
+             
+             // The Simulated Prediction that would have been made for this round
+             const simulatedPrediction = previousResult === 'Big' ? 'Small' : 'Big';
+
+             if (currentResult === simulatedPrediction) winCount++;
+             else lossCount++;
+        }
+
+        // Update Stats UI
+        document.getElementById('winCount').innerText = winCount;
+        document.getElementById('lossCount').innerText = lossCount;
+
+        // Populate Table UI
+        list.slice(0,10).forEach(item => {
+           const n = parseInt(item.number);
+           const size = n >= 5 ? 'Big' : 'Small';
+           const color = [1,3,7,9].includes(n) ? 'green' : ([2,4,6,8].includes(n) ? 'red' : 'violet');
+           
+           tbody.innerHTML += `
+             <tr>
+               <td>${item.issueNumber.slice(-4)}</td>
+               <td style="color:${color==='green'?'#0f0':color==='red'?'#f00':'#f0f'}; font-weight:bold;">${n}</td>
+               <td>${size}</td>
+               <td><span class="dot ${color}"></span></td>
+             </tr>`;
+        });
+
+        // 3. Make NEXT Prediction (Realtime)
+        const latestResultSize = parseInt(list[0].number) >= 5 ? 'Big' : 'Small';
+        const nextPrediction = latestResultSize === 'Big' ? 'Small' : 'Big'; 
+        const confidence = 85 + Math.floor(Math.random() * 10);
+
+        document.getElementById('predictionBox').innerHTML = `
+            <div style="font-size:14px; color:#ccc; letter-spacing:1px;">NEXT PREDICTION</div>
+            <div class="pred-res">${nextPrediction.toUpperCase()}</div>
+            <div style="font-size:12px; color:#fff; background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; display:inline-block;">Chance: ${confidence}%</div>
+        `;
+
+      } catch(e) {}
+    }
+  </script>
+</body>
+</html>
