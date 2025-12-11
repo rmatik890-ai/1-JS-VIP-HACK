@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Panel - </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { background: #121212; color: #e0e0e0; font-family: 'Outfit', sans-serif; margin: 0; padding: 20px; }
+    h1, h2, h3 { margin: 0; }
+    
+    /* Header */
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 20px; }
+    .header h1 { color: #00ffc8; font-size: 24px; text-transform: uppercase; letter-spacing: 1px; }
+    
+    /* Cards */
+    .card { background: #1e1e1e; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); border: 1px solid #333; }
+    
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+    .stat-box { background: #2c2c2c; padding: 20px; border-radius: 10px; text-align: center; border: 1px solid #333; transition: 0.3s; }
+    .stat-box:hover { border-color: #00ffc8; transform: translateY(-2px); }
+    .stat-box h3 { font-size: 32px; color: #fff; margin-bottom: 5px; }
+    
+    /* Navigation */
+    .nav-container { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 20px; padding-bottom: 5px; }
+    .nav-btn { background: #333; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; white-space: nowrap; transition: 0.3s; }
+    .nav-btn.active { background: #00ffc8; color: #000; box-shadow: 0 0 10px rgba(0, 255, 200, 0.4); }
+    
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #252525; border-radius: 8px; overflow: hidden; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; font-size: 14px; vertical-align: middle; }
+    th { background: #333; color: #00ffc8; text-transform: uppercase; font-size: 12px; }
+    tr:hover { background: #2a2a2a; }
+    
+    /* Images */
+    .proof-img { width: 60px; height: 60px; object-fit: cover; border-radius: 5px; border: 1px solid #555; cursor: pointer; transition: 0.2s; }
+    .proof-img:hover { transform: scale(3); z-index: 100; position: relative; border: 2px solid #fff; box-shadow: 0 0 10px #000; }
+
+    /* Buttons */
+    .action-btn { padding: 8px 12px; border: none; border-radius: 6px; color: #fff; cursor: pointer; margin-right: 5px; font-size: 12px; font-weight: bold; }
+    .btn-approve { background: #28a745; box-shadow: 0 2px 5px rgba(40, 167, 69, 0.4); }
+    .btn-reject { background: #dc3545; box-shadow: 0 2px 5px rgba(220, 53, 69, 0.4); }
+    .btn-save { background: linear-gradient(90deg, #00ffc8, #00b3ff); color: #000; width: 100%; padding: 15px; font-size: 16px; font-weight: bold; margin-top: 15px; border-radius: 10px; }
+
+    /* Forms */
+    input, select { background: #2a2a2a; border: 1px solid #444; color: #fff; padding: 12px; width: 100%; margin-bottom: 15px; box-sizing: border-box; border-radius: 8px; outline: none; }
+    input:focus { border-color: #00ffc8; }
+    label { display: block; margin-bottom: 8px; color: #ccc; font-size: 13px; font-weight: bold; }
+    
+    .color-picker-wrapper { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+    input[type="color"] { width: 60px; padding: 0; height: 45px; border: none; cursor: pointer; }
+    
+    /* Logo Preview */
+    .logo-preview { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #00ffc8; object-fit: cover; margin-top: 10px; display: block; background: #000; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div>
+        <h1>ADMIN DASHBOARD</h1>
+        <small style="color:#888;"> Control Center</small>
+    </div>
+    <div style="text-align: right;">
+        <div style="font-size: 12px; color: #888;">System</div>
+        <div style="color: #0f0; font-weight: bold;">● LIVE</div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-box">
+      <h3 id="totalUsers">0</h3>
+      <span style="color: #aaa;">Total Users</span>
+    </div>
+    <div class="stat-box" style="border-color: #00ffc8;">
+      <h3 id="pendingReq" style="color: #00ffc8;">0</h3>
+      <span style="color: #aaa;">Pending Requests</span>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="nav-container">
+    <button class="nav-btn active" onclick="switchTab('requests', this)">🔔 Requests</button>
+    <button class="nav-btn" onclick="switchTab('users', this)">👥 Users</button>
+    <button class="nav-btn" onclick="switchTab('settings', this)">⚙️ App Settings</button>
+  </div>
+
+  <!-- 1. Verification Requests -->
+  <div id="tab-requests" class="card">
+    <h2>📥 Deposit Verification</h2>
+    <p style="color: #777; font-size: 13px; margin-bottom:15px;">Check user screenshots and UID carefully.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>User / Phone</th>
+          <th>Game UID</th>
+          <th>Proof</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="reqTableBody">
+        <tr><td colspan="4" style="text-align:center;">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2. User List -->
+  <div id="tab-users" class="card" style="display:none;">
+    <h2>👥 Registered Users</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Credentials</th>
+          <th>Status</th>
+          <th>Manage</th>
+        </tr>
+      </thead>
+      <tbody id="userTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- 3. Settings -->
+  <div id="tab-settings" class="card" style="display:none;">
+    <h2>⚙️ App Customization</h2>
+    <p style="color:#777; font-size:12px; margin-bottom:20px;">Control how the User Panel looks and functions.</p>
+    
+    <label>App Name (Header Title)</label>
+    <input type="text" id="setSiteName" placeholder="e.g. SAKIB TEAM">
+
+    <label>App Logo / Profile Picture URL</label>
+    <div style="display:flex; gap:15px; align-items:center;">
+        <input type="text" id="setLogoUrl" placeholder="https://i.imgur.com/example.png" oninput="document.getElementById('logoPrev').src = this.value">
+        <img id="logoPrev" src="" class="logo-preview" alt="Logo">
+    </div>
+    <small style="color:#555;">Paste a direct image link (ends in .png or .jpg)</small>
+
+    <div style="margin-top:15px;">
+        <label>Theme Color</label>
+        <div class="color-picker-wrapper">
+            <input type="color" id="setColorPicker" onchange="document.getElementById('setColor').value = this.value">
+            <input type="text" id="setColor" placeholder="#00ffc8">
+        </div>
+    </div>
+
+    <label>Notice / Marquee Text (Important Alert)</label>
+    <input type="text" id="setNotice" placeholder="Welcome to Sakib Team VIP...">
+
+    <h3 style="margin-top:20px; color:#00ffc8; border-top:1px solid #333; padding-top:10px;">🔗 Links Configuration</h3>
+    
+    <label>Registration (Referral) Link</label>
+    <input type="text" id="setRefLink" placeholder="https://game-site.com/register?code=...">
+
+    <label>Telegram Channel Link</label>
+    <input type="text" id="setTgLink" placeholder="https://t.me/...">
+
+    <button class="action-btn btn-save" onclick="saveSettings()">SAVE ALL CHANGES</button>
+  </div>
+
+  <!-- Firebase Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, onValue, update } 
+      from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCUAlNk4vKm9EsfXD6Laps4URU3hsD8MYU",
+
+
+  authDomain: "bdthack-b1c59.firebaseapp.com",
+
+
+  databaseURL: "https://bdthack-b1c59-default-rtdb.firebaseio.com",
+
+
+  projectId: "bdthack-b1c59",
+
+
+  storageBucket: "bdthack-b1c59.firebasestorage.app",
+
+
+  messagingSenderId: "54831055352",
+
+
+  appId: "1:54831055352:web:e6222630876fe4cd8ed60d",
+
+
+  measurementId: "G-K1GR4LCYM5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // --- LOAD DATA ---
+    const usersRef = ref(db, 'users');
+    const settingsRef = ref(db, 'settings');
+
+    onValue(usersRef, (snapshot) => {
+      const users = snapshot.val();
+      renderTables(users);
+    });
+
+    onValue(settingsRef, (snapshot) => {
+      const data = snapshot.val();
+      if(data) {
+        // Text Fields
+        document.getElementById('setSiteName').value = data.siteName || '';
+        document.getElementById('setLogoUrl').value = data.logoUrl || '';
+        document.getElementById('logoPrev').src = data.logoUrl || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+        
+        // Colors
+        document.getElementById('setColor').value = data.primaryColor || '#00ffc8';
+        document.getElementById('setColorPicker').value = data.primaryColor || '#00ffc8';
+        
+        // Links
+        document.getElementById('setRefLink').value = data.refLink || '';
+        document.getElementById('setTgLink').value = data.tgLink || '';
+        document.getElementById('setNotice').value = data.notice || '';
+      }
+    });
+
+    function renderTables(users) {
+      const reqTable = document.getElementById('reqTableBody');
+      const userTable = document.getElementById('userTableBody');
+      
+      reqTable.innerHTML = '';
+      userTable.innerHTML = '';
+      
+      let total = 0;
+      let pending = 0;
+
+      if(users) {
+        Object.values(users).forEach(user => {
+          total++;
+          
+          // 1. Render User List
+          userTable.innerHTML += `
+            <tr>
+              <td><b style="color:#fff">${user.username}</b></td>
+              <td>${user.phone}<br><small style="color:#777; font-family:monospace;">${user.password}</small></td>
+              <td>
+                <span style="padding: 2px 8px; border-radius: 4px; font-size:11px; background:${user.status==='active'?'rgba(0,255,0,0.2)':(user.status==='banned'?'rgba(255,0,0,0.2)':'rgba(255,165,0,0.2)')}; color:${user.status==='active'?'#0f0':(user.status==='banned'?'#f44':'orange')}">
+                    ${user.status.toUpperCase()}
+                </span>
+              </td>
+              <td>
+                 <button class="action-btn btn-reject" onclick="window.setStatus('${user.uid}', 'banned')">Ban</button>
+                 <button class="action-btn btn-approve" onclick="window.setStatus('${user.uid}', 'active')">Unban</button>
+              </td>
+            </tr>
+          `;
+
+          // 2. Render Request List (Only Pending)
+          if(user.verification_status === 'pending') {
+            pending++;
+            const imgHtml = user.deposit_proof 
+                ? `<img src="${user.deposit_proof}" class="proof-img" onclick="window.open(this.src)" title="View Full Image">` 
+                : '<span style="color:red; font-size:12px;">No Image</span>';
+
+            reqTable.innerHTML += `
+              <tr>
+                <td>
+                    <div style="font-weight:bold; color:#fff;">${user.username}</div>
+                    <div style="font-size:12px; color:#aaa;">${user.phone}</div>
+                </td>
+                <td style="color:#00ffc8; font-family:monospace; font-size:14px;">${user.game_uid || 'N/A'}</td>
+                <td>${imgHtml}</td>
+                <td>
+                   <button class="action-btn btn-approve" onclick="window.verifyUser('${user.uid}', true)">✔ Accept</button>
+                   <button class="action-btn btn-reject" onclick="window.verifyUser('${user.uid}', false)">✖ Deny</button>
+                </td>
+              </tr>
+            `;
+          }
+        });
+      }
+
+      if(pending === 0) reqTable.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#555;">No pending verification requests.</td></tr>';
+      
+      document.getElementById('totalUsers').innerText = total;
+      document.getElementById('pendingReq').innerText = pending;
+    }
+
+    // --- ACTIONS ---
+    window.setStatus = (uid, status) => {
+      if(confirm(`Set user status to ${status}?`)) {
+          update(ref(db, 'users/' + uid), { status: status });
+      }
+    };
+
+    window.verifyUser = (uid, isApproved) => {
+      if(isApproved) {
+        if(confirm("Approve this user for Premium Access?")) {
+            update(ref(db, 'users/' + uid), { 
+              status: 'active', 
+              verification_status: 'approved' 
+            });
+        }
+      } else {
+        if(confirm("Reject this request? User will need to submit again.")) {
+            update(ref(db, 'users/' + uid), { 
+              verification_status: 'rejected',
+              deposit_proof: null 
+            });
+        }
+      }
+    };
+
+    window.saveSettings = () => {
+      const settingsData = {
+        siteName: document.getElementById('setSiteName').value,
+        logoUrl: document.getElementById('setLogoUrl').value,
+        primaryColor: document.getElementById('setColor').value,
+        refLink: document.getElementById('setRefLink').value,
+        tgLink: document.getElementById('setTgLink').value,
+        notice: document.getElementById('setNotice').value
+      };
+      update(settingsRef, settingsData).then(() => alert('✅ Settings Saved! User App Updated.'));
+    };
+
+    window.switchTab = (tabId, btn) => {
+      ['requests', 'users', 'settings'].forEach(t => {
+          document.getElementById('tab-' + t).style.display = 'none';
+      });
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      
+      document.getElementById('tab-' + tabId).style.display = 'block';
+      btn.classList.add('active');
+    };
+  </script>
+</body>
+</html>
